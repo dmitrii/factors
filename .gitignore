@@ -1,0 +1,4 @@
+*.pyc
+.idea
+factoring_service/lib/*
+!factoring_service/lib/.gitkeep
