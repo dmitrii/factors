@@ -8,9 +8,9 @@ from google.appengine.ext import ndb
 class Factors(ndb.Model):
     """ Models the prime factors of an integer, which serves as the key. """
     request_ts = ndb.DateTimeProperty(auto_now_add=True)
-    result_ts = ndb.DateTimeProperty()
-    result_msg = ndb.StringProperty(default='pending')
-    result_list = ndb.IntegerProperty(repeated=True)
+    result_ts = ndb.DateTimeProperty(indexed=False)
+    result_msg = ndb.StringProperty(default='pending', indexed=False)
+    result_list = ndb.IntegerProperty(repeated=True, indexed=False)
 
     @staticmethod
     @ndb.transactional
