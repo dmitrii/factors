@@ -1,0 +1,9 @@
+runtime: python27
+api_version: 1
+threadsafe: true
+module: factoring-service
+instance_class: F4
+
+handlers:
+- url: /.*
+  script: factor.app
