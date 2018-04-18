@@ -36,9 +36,11 @@ class Factors(ndb.Model):
     @staticmethod
     def set_result(product, result_list):
         key = ndb.Key(Factors, str(product))
-        result_list = [str(result) for result in result_list]
-        Factors(key=key, result_list=result_list, result_msg='computed',
-                result_ts=datetime.utcnow()).put()
+        factors = key.get()
+        factors.result_list = [str(result) for result in result_list]
+        factors.result_msg = 'computed'
+        factors.result_ts = datetime.utcnow()
+        factors.put()
 
     @staticmethod
     def encode(value):
