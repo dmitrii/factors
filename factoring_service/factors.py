@@ -8,9 +8,9 @@ from google.appengine.ext import ndb
 class Factors(ndb.Model):
     """ Models the prime factors of an integer, which serves as the key. """
     request_ts = ndb.DateTimeProperty(auto_now_add=True)
-    result_ts = ndb.DateTimeProperty()
-    result_msg = ndb.StringProperty(default='pending')
-    result_list = ndb.IntegerProperty(repeated=True)
+    result_ts = ndb.DateTimeProperty(indexed=False)
+    result_msg = ndb.StringProperty(default='pending', indexed=False)
+    result_list = ndb.BlobProperty(repeated=True, indexed=False)
 
     @staticmethod
     @ndb.transactional
@@ -36,6 +36,7 @@ class Factors(ndb.Model):
     @staticmethod
     def set_result(product, result_list):
         key = ndb.Key(Factors, str(product))
+        result_list = [str(result) for result in result_list]
         Factors(key=key, result_list=result_list, result_msg='computed',
                 result_ts=datetime.now()).put()
 
@@ -47,4 +48,5 @@ class Factors(ndb.Model):
         details = {'number': int(self.key.id())}
         details.update({key: self.encode(val)
                         for key, val in self.to_dict().items()})
+        details['result_list'] = [int(result) for result in self.result_list]
         return details
