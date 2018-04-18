@@ -38,7 +38,7 @@ class Factors(ndb.Model):
         key = ndb.Key(Factors, str(product))
         result_list = [str(result) for result in result_list]
         Factors(key=key, result_list=result_list, result_msg='computed',
-                result_ts=datetime.now()).put()
+                result_ts=datetime.utcnow()).put()
 
     @staticmethod
     def encode(value):
