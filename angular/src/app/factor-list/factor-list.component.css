@@ -1,0 +1,15 @@
+.mat-card-title {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+/* ones below do not work */
+
+.mat-form-field-infix {
+    font-size: 18px;
+    width: 500px;
+}
+
+.custom-card {
+    background-color: gray;
+}

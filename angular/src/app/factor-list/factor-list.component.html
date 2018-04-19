@@ -1,0 +1,23 @@
+<mat-card>
+  <mat-card-content>
+    <form #factorForm="ngForm" (ngSubmit)="factor(factorForm.value)">
+      <mat-form-field>
+        <input matInput placeholder="Enter an integer to factor" dividerColor="accent" name="number" ngModel>
+      </mat-form-field>
+    </form>
+  </mat-card-content>
+</mat-card>
+
+<mat-card *ngFor="let factor of factors">
+  <mat-card-header [ngClass]="{ 'custom-card': $first }">
+    <mat-card-title>{{factor.number}}</mat-card-title>
+    <mat-card-subtitle>{{factor.status}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item *ngFor="let result of factor.prod_list">
+        {{result}}
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>

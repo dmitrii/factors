@@ -3,5 +3,18 @@ api_version: 1
 threadsafe: true
 
 handlers:
+
+- url: /favicon.ico
+  static_files: dist/favicon.ico
+  upload: dist/assets/favicon.ico
+
+- url: /(.*\.(gif|png|jpg|css|js)(|\.map))$
+  static_files: dist/\1
+  upload: dist/(.*)(|\.map)
+
+- url: /
+  static_files: dist/index.html
+  upload: dist/index.html
+
 - url: /.*
   script: main.app
