@@ -39,6 +39,7 @@ class Factors(ndb.Model):
 
     @staticmethod
     def list(offset, limit):
+    #    return Factors.list_by_result_size(offset, limit);
         cache_key = ':'.join(['-request_ts', str(offset), str(limit)])
         results = memcache.get(cache_key)
         if results is None:
@@ -90,7 +91,7 @@ class Factors(ndb.Model):
         return value.isoformat() if isinstance(value, datetime) else value
 
     def safe_dict(self):
-        details = {'number': int(self.key.id()),
+        details = {'number': str(self.key.id()), # return as str() so JS doesn't convert to scientific notation
                    'now_ts': self.encode(datetime.utcnow())}
         details.update({key: self.encode(val)
                         for key, val in self.to_dict().items()})
