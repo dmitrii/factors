@@ -11,6 +11,8 @@ class Factors(ndb.Model):
     result_ts = ndb.DateTimeProperty(indexed=False)
     result_msg = ndb.StringProperty(default='pending', indexed=False)
     result_list = ndb.BlobProperty(repeated=True, indexed=False)
+#    compute_duration = ndb.ComputedProperty(lambda self: (self.result_ts - self.request_ts).seconds)
+    result_list_size = ndb.ComputedProperty(lambda self: len(self.result_list))
 
     @staticmethod
     @ndb.transactional
@@ -21,16 +23,22 @@ class Factors(ndb.Model):
         if entity is not None:
             return entity
 
-        result = Factors(key=key)
-        result.put()
-
-        taskqueue.add(url='/factor', target='factoring-service',
-                      params={'number': product}, transactional=True)
-        return result
+        entity = Factors(key=key)
+        entity.put()
+        taskqueue.add(url='/factor',
+                      target='factoring-service',
+                      params={'number': product},
+                      transactional=True)
+        return entity
 
     @staticmethod
     def list(offset, limit):
         query = Factors.query().order(-Factors.request_ts)
+
+        # query = Factors.query()
+        # SELECT * FROM Factors ORDER BY __key__ DESC
+        # SELECT * FROM Factors ORDER BY compute_duration
+
         return query.fetch(offset=offset, limit=limit)
 
     @staticmethod
@@ -47,7 +55,8 @@ class Factors(ndb.Model):
         return value.isoformat() if isinstance(value, datetime) else value
 
     def safe_dict(self):
-        details = {'number': int(self.key.id())}
+        details = {'number': int(self.key.id()),
+                   'now_ts': self.encode(datetime.utcnow())}
         details.update({key: self.encode(val)
                         for key, val in self.to_dict().items()})
         details['result_list'] = [int(result) for result in self.result_list]
