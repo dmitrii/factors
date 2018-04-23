@@ -6,6 +6,7 @@ from datetime import datetime
 from google.appengine.api import memcache
 from google.appengine.api import taskqueue
 from google.appengine.ext import ndb
+from google.appengine.api.taskqueue.taskqueue import TaskRetryOptions
 
 # The number of seconds to keep queries cached.
 QUERY_CACHE_TTL = 10
@@ -34,7 +35,8 @@ class Factors(ndb.Model):
         taskqueue.add(url='/factor',
                       target='factoring-service',
                       params={'number': product},
-                      transactional=True)
+                      transactional=True,
+                      retry_options=TaskRetryOptions(task_age_limit=50)) # don't retry long-running tasks
         return entity
 
     @staticmethod
