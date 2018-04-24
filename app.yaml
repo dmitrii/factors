@@ -2,6 +2,10 @@ runtime: python27
 api_version: 1
 threadsafe: true
 
+skip_files:
+ - angular/
+ - .git/
+
 handlers:
 
 - url: /favicon.ico
@@ -18,3 +22,4 @@ handlers:
 
 - url: /.*
   script: main.app
+
