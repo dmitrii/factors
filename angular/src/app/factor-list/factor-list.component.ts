@@ -60,8 +60,8 @@ export class FactorListComponent implements OnInit {
       }
     });
     if (this.top_result != null &&
-      new_factors.length > 0 &&
-      this.top_result.number != new_factors[0].number) {
+        (new_factors.length == 0 ||
+        this.top_result.number != new_factors[0].number)) {
       this.top_result.top = true;
       new_factors.unshift(this.top_result);
     }
