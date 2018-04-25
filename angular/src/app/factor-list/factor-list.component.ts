@@ -34,7 +34,8 @@ export class FactorListComponent implements OnInit {
       var diff_sec = (diff_ms / 1000).toFixed(3)
       factor.status = factor.result_msg + " in " + diff_sec + " seconds"
     }
-    if (factor.result_list.length == 1) {
+    if (factor.result_list.length == 1 &&
+        factor.result_list[0].number == factor.number) {
       factor.status = factor.status + ' as prime!';
     }
 
