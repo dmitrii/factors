@@ -30,9 +30,13 @@ class GetFactor(webapp2.RequestHandler):
         self.response.headers.add_header("Access-Control-Allow-Origin", "*")
         json.dump(result.safe_dict(), self.response, indent=4)
 
+class DoGroom(webapp2.RequestHandler):
+    def get(self):
+        Factors.check_pending()
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/factors', ListFactors),
     ('/factors/(\d+)', GetFactor),
+    ('/groom', DoGroom)
 ], debug=True)
